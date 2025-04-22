@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amora - Your Love Assistant</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 40px; background: #ffe6e6; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+        .output { margin-top: 20px; font-size: 18px; color: #cc0052; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Amora</h1>
+    <p>Your romantic assistant</p>
+
+    <button onclick="fetchLoveMessage()">Get Love Message</button>
+    <button onclick="fetchDateIdea()">Get Date Idea</button>
+    
+    <br>
+    <label for="stage">Relationship Stage:</label>
+    <select id="stage">
+        <option value="new">New</option>
+        <option value="serious">Serious</option>
+        <option value="longterm">Long-term</option>
+    </select>
+    <button onclick="fetchGift()">Get Gift Idea</button>
+
+    <div class="output" id="output"></div>
+
+    <script>
+        function fetchLoveMessage() {
+            fetch('/get_love_message')
+                .then(response => response.json())
+                .then(data => document.getElementById('output').innerText = data.message);
+        }
+
+        function fetchDateIdea() {
+            fetch('/get_date_idea')
+                .then(response => response.json())
+                .then(data => document.getElementById('output').innerText = data.idea);
+        }
+
+        function fetchGift() {
+            const stage = document.getElementById('stage').value;
+            fetch('/get_gift', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stage })
+            })
+            .then(response => response.json())
+            .then(data => document.getElementById('output').innerText = data.gift);
+        }
+    </script>
+</body>
+</html>
